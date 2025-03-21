@@ -27,7 +27,7 @@ export default function Conversas(){
       };
 
     return(
-        <div className="flex-1 bg-[#f1ebe5] rounded-2xl p-4 col-span-5 m-6 mr-10 flex flex-col  items-center shadow-2xl relative  justify-between md:col-span-4 sm:col-span-5 ">
+        <div className="flex-1 bg-[#f1ebe5] rounded-2xl p-4 col-span-5 m-6  flex flex-col  items-center shadow-2xl relative  justify-between md:col-span-4 sm:col-span-5 max-sm:col-span-6">
           <div className="self-start w-full">
           <div className="bg-amber-50 w-full flex items-center py-2 p-4 absolute inset-x-0 top-0 rounded-t-2xl">
             <Image 

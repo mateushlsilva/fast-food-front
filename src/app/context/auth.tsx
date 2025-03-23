@@ -3,12 +3,18 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { User, api, apiBot } from "../service";
 import { usePathname } from "next/navigation";
+import Swal from 'sweetalert2'
 
 interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   refreshAccessToken: () => Promise<void>;
   logout: () => void;
+}
+
+interface AuthProps{
+    token: string;
+    refresh_token: string;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await User.auth(email, password);
+      const res: AuthProps = await User.auth(email, password)
 
       const newToken = res.token;
       const refreshToken = res.refresh_token;
@@ -48,10 +54,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       api.defaults.headers.Authorization = `Bearer ${newToken}`;
       apiBot.defaults.headers.Authorization = `Bearer ${newToken}`;
      
-      
+      Swal.fire({
+        title: 'Login!',
+        text: 'Login efuetuado com sucesso!',
+        icon: 'success',
+        confirmButtonText: 'ok'
+        })
 
       window.location.href = "/";
     } catch (err) {
+        Swal.fire({
+            title: 'Erro!',
+            text: 'Erro ao fazer login.',
+            icon: 'error',
+            confirmButtonText: 'ok'
+        })
       console.error("Erro no login", err);
     }
   };

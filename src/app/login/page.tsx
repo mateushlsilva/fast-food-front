@@ -5,7 +5,7 @@ import { InputForm } from '../components'
 import { useState } from "react";
 import { useAuth } from '../hook'
 import { useRouter } from "next/navigation";
-
+import Swal from 'sweetalert2'
 
 export default function Login(){
     const [ email, setEmail ] = useState('')
@@ -15,9 +15,22 @@ export default function Login(){
    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         try {
-            await login(email, senha)
+            await login(email, senha).catch(() => {
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Erro ao fazer login.',
+                    icon: 'error',
+                    confirmButtonText: 'ok'
+                })
+            })
         } catch (error) {
             console.log(error)
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Erro ao fazer login.',
+                icon: 'error',
+                confirmButtonText: 'ok'
+            })
         }
    }
     return (

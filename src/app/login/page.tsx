@@ -4,10 +4,13 @@ import Image from "next/image";
 import { InputForm } from '../components'
 import { useState } from "react";
 import { useAuth } from '../hook'
+import { useRouter } from "next/navigation";
+
 
 export default function Login(){
     const [ email, setEmail ] = useState('')
     const [ senha, setSenha ] = useState('')
+    const router = useRouter()
     const { login } = useAuth()
    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
@@ -43,7 +46,7 @@ export default function Login(){
                 <p className="text-[#423f32] text-center mt-10">Não tem uma conta?</p>
                 <button className="text-white bg-[#ed4742] w-[80%] h-10 rounded-lg active:scale-90 active:bg-red-700 transition-transform shadow-2xl
                     mt-5 mr-auto ml-auto flex justify-center items-center
-                    ">Cadastrar</button>
+                    " onClick={() => router.push('/cadastro')}>Cadastrar</button>
             </div>
               
         </div>

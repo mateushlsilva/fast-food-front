@@ -29,14 +29,34 @@ export default function Conversas(){
 
     
     const handleSubmit = async () => {
+      // Adiciona a mensagem do usuário
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { usuario: value, chat: "..." }, 
+      ]);
+  
       try {
-        const res = await Chatbot.conversar(value);
-        setMessages((prevMessages) => [...prevMessages, { usuario: res.question, chat: res.response }]);
-        setValue(''); // Limpar o campo após o envio
+        const res = await Chatbot.conversar(value)
+        setValue('');
+        setMessages((prevMessages) =>
+          prevMessages.map((message) =>
+            message.chat === "..."
+              ? { usuario: "", chat: res.response }
+              : message
+          )
+        );
       } catch (error) {
-        console.error("Erro ao enviar mensagem:", error);
+        console.error('Erro ao enviar mensagem:', error);
+        setMessages((prevMessages) =>
+          prevMessages.map((message) =>
+            message.chat === "..."
+              ? { usuario: "", chat: "Erro na resposta." }
+              : message
+          )
+        );
       }
     };
+  
 
     return(
         <div className="flex-1 bg-[#f1ebe5] rounded-2xl p-4 col-span-5 m-6  flex flex-col  items-center shadow-2xl relative  justify-between md:col-span-4 sm:col-span-5 max-sm:col-span-6">

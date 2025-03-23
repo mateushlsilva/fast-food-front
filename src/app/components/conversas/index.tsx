@@ -1,13 +1,26 @@
 'use client'
 import { useState, useRef, useEffect } from 'react';
 import Image from "next/image";
+import { Chatbot } from '../../service'
+
+interface Message {
+  usuario: string;
+  chat: string;
+}
+
 
 export default function Conversas(){
     const [value, setValue] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
+    const [messages, setMessages] = useState<Message[]>([]);
+
+    const getHistoric = async () => {
+        const res = await Chatbot.conversaHistoric()
+        setMessages(res.conversa)
+    }
   
     useEffect(() => {
+      getHistoric()
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto'; 
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
@@ -15,10 +28,15 @@ export default function Conversas(){
     }, [value]);
 
     
-      const handleSubmit = () => {
-        console.log('Enviado:', value);
-        setValue(''); 
-      };
+    const handleSubmit = async () => {
+      try {
+        const res = await Chatbot.conversar(value);
+        setMessages((prevMessages) => [...prevMessages, { usuario: res.question, chat: res.response }]);
+        setValue(''); // Limpar o campo após o envio
+      } catch (error) {
+        console.error("Erro ao enviar mensagem:", error);
+      }
+    };
 
     return(
         <div className="flex-1 bg-[#f1ebe5] rounded-2xl p-4 col-span-5 m-6  flex flex-col  items-center shadow-2xl relative  justify-between md:col-span-4 sm:col-span-5 max-sm:col-span-6">
@@ -35,7 +53,21 @@ export default function Conversas(){
             </div>
           </div>
           <div>
-              {/* Mexer aqui depois*/}
+          <div className="flex flex-col items-center w-full mt-16 mb-8">
+            <div className="overflow-y-auto max-h-[500px] w-[100%] ">
+              {messages.map((message, index) => (
+                <div key={index} className="flex flex-col">
+                  <div className="bg-[#f7be97] w-[45%] rounded m-3 p-2 ml-auto">
+                    <p className="text-white font-light">{message.usuario}</p>
+                  </div>
+                  <div className="bg-[#ed4742] w-[45%] rounded m-3 p-2">
+                    <p className="text-white font-light">{message.chat}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           </div>
           <div className=' text-lg rounded-md  mb-0 text-white p-2 focus:outline-none focus:ring-0 w-full justify-between flex '>
  

@@ -9,7 +9,7 @@ export default function InputForm({input, setInput, placeholder}:PropsInput){
         <div className="relative flex justify-center items-center pt-[7%] ">
         <div className="relative w-[80%]">
             <input 
-                type="text" 
+                type={placeholder === 'Senha' || placeholder === 'Repetir Senha' ? "password" : "text"} 
                 id="input"
                 value={input} 
                 onChange={(e) => setInput(e.target.value)} 
@@ -22,7 +22,8 @@ export default function InputForm({input, setInput, placeholder}:PropsInput){
                     transition-all duration-300
                     placeholder-transparent peer bg-[#f1ebe5]
                 "
-                placeholder={placeholder} 
+                placeholder={placeholder}
+                 
             />
             <label 
                 htmlFor="input"

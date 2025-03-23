@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from "next/image";
 import { Chatbot } from '../../service'
+import { useAuth } from '../../hook'
 
 interface Message {
   usuario: string;
@@ -13,6 +14,7 @@ export default function Conversas(){
     const [value, setValue] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [messages, setMessages] = useState<Message[]>([]);
+    const { logout } = useAuth()
 
     const getHistoric = async () => {
         const res = await Chatbot.conversaHistoric()
@@ -70,6 +72,14 @@ export default function Conversas(){
                 className="rounded-full"
               />
               <h1 className="text-black text-2xl font-bold pl-4 ">Fast Food</h1>
+              <Image 
+                src="/sair.png"           
+                alt="Sair"
+                width={50} 
+                height={50} 
+                className="ml-auto active:scale-90 active:bg-white transition-transform "
+                onClick={logout}
+              />
             </div>
           </div>
           <div>
